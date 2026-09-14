@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Environment files with secrets — never commit these
+.env
+.env.local
+
+# Build output
+dist/
+build/
+
+# Uploaded check-in photos (local dev storage)
+backend/uploads/
+
+# OS/editor junk
+.DS_Store
+.vscode/
+*.log
