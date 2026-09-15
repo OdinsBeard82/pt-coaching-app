@@ -4,16 +4,16 @@ import { requireAuth, requireCoach } from '../middleware/auth.js';
 
 const router = Router();
 
-// Coach: list all clients with their subscription status and assigned program
+// Coach: list all clients with their subscription status/tier and assigned program
 router.get('/', requireAuth, requireCoach, async (req, res) => {
   const result = await pool.query(
     `SELECT u.id, u.name, u.email, u.current_program_id, p.title AS program_title,
-            s.status AS subscription_status, s.current_period_end,
+            s.status AS subscription_status, s.tier AS subscription_tier, s.current_period_end,
             (SELECT MAX(created_at) FROM checkins c WHERE c.user_id = u.id) AS last_checkin_at
      FROM users u
      LEFT JOIN programs p ON p.id = u.current_program_id
      LEFT JOIN LATERAL (
-       SELECT status, current_period_end FROM subscriptions
+       SELECT status, tier, current_period_end FROM subscriptions
        WHERE user_id = u.id ORDER BY created_at DESC LIMIT 1
      ) s ON true
      WHERE u.role = 'client'
@@ -42,11 +42,11 @@ router.put('/:id/assign-program', requireAuth, requireCoach, async (req, res) =>
 router.get('/:id', requireAuth, requireCoach, async (req, res) => {
   const userResult = await pool.query(
     `SELECT u.id, u.name, u.email, u.current_program_id, p.title AS program_title,
-            s.status AS subscription_status, s.current_period_end
+            s.status AS subscription_status, s.tier AS subscription_tier, s.current_period_end
      FROM users u
      LEFT JOIN programs p ON p.id = u.current_program_id
      LEFT JOIN LATERAL (
-       SELECT status, current_period_end FROM subscriptions
+       SELECT status, tier, current_period_end FROM subscriptions
        WHERE user_id = u.id ORDER BY created_at DESC LIMIT 1
      ) s ON true
      WHERE u.id = $1 AND u.role = 'client'`,

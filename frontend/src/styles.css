@@ -674,3 +674,23 @@ select:focus {
   color: var(--cyan);
   font-weight: 700;
 }
+
+/* Tier badges (coach views) */
+.tier-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  background: var(--line);
+  color: var(--ink-muted);
+}
+
+.tier-badge.silver {
+  background: rgba(62, 198, 255, 0.15);
+  color: var(--cyan);
+}
+
+.tier-badge.gold {
+  background: rgba(255, 62, 160, 0.15);
+  color: var(--magenta);
+}

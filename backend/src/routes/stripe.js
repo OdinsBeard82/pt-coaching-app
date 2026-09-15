@@ -121,9 +121,6 @@ export async function handleStripeWebhook(req, res) {
 }
 
 async function upsertSubscription(userId, subscription) {
-  // Newer Stripe API versions moved current_period_end from the subscription
-  // itself onto each subscription item. Check both locations so this keeps
-  // working regardless of which API version the account is on.
   const periodEndTimestamp =
     subscription.items?.data?.[0]?.current_period_end ?? subscription.current_period_end;
   const periodEnd = periodEndTimestamp ? new Date(periodEndTimestamp * 1000) : null;

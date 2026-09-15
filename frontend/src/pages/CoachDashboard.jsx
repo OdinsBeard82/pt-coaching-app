@@ -2,6 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../api';
 
+function tierLabel(tier) {
+  if (tier === 'gold') return 'Gold';
+  if (tier === 'silver') return 'Silver';
+  return '—';
+}
+
 export default function CoachDashboard() {
   const [clients, setClients] = useState([]);
   const [programs, setPrograms] = useState([]);
@@ -77,6 +83,7 @@ export default function CoachDashboard() {
             <tr>
               <th>Name</th>
               <th>Status</th>
+              <th>Package</th>
               <th>Program</th>
               <th>Last check-in</th>
               <th></th>
@@ -89,6 +96,11 @@ export default function CoachDashboard() {
                 <td>
                   <span className={`status-badge ${c.subscription_status === 'active' ? 'active' : ''}`}>
                     {c.subscription_status || 'none'}
+                  </span>
+                </td>
+                <td>
+                  <span className={`tier-badge ${c.subscription_tier || ''}`}>
+                    {tierLabel(c.subscription_tier)}
                   </span>
                 </td>
                 <td>{c.program_title || <span className="subtle">Unassigned</span>}</td>

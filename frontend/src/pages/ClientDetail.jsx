@@ -2,6 +2,12 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../api';
 
+function tierLabel(tier) {
+  if (tier === 'gold') return 'Gold Package';
+  if (tier === 'silver') return 'Silver Package';
+  return 'No package selected';
+}
+
 export default function ClientDetail() {
   const { id } = useParams();
   const [client, setClient] = useState(null);
@@ -70,6 +76,11 @@ export default function ClientDetail() {
 
       <div className="card">
         <h2>Subscription</h2>
+        <p>
+          Package: <span className={`tier-badge ${client.subscription_tier || ''}`}>
+            {tierLabel(client.subscription_tier)}
+          </span>
+        </p>
         <p>
           Status: <span className={`status-badge ${client.subscription_status === 'active' ? 'active' : ''}`}>
             {client.subscription_status || 'none'}
